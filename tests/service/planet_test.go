@@ -2,10 +2,12 @@ package service
 
 import (
 	"testing"
+
+	"github.com/mthcsta/star-wars-api-test/service"
 )
 
 var (
-	planetService PlanetService = PlanetService{}
+	planetService service.PlanetService = service.PlanetService{}
 )
 
 func TestGetFilmsIdByPlanetName(t *testing.T) {

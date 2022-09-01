@@ -9,12 +9,13 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mthcsta/star-wars-api-test/controller"
 	"github.com/mthcsta/star-wars-api-test/model"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
-	filmController FilmController = FilmController{}
+	filmController controller.FilmController = controller.FilmController{}
 )
 
 func TestFilmGetAll(t *testing.T) {

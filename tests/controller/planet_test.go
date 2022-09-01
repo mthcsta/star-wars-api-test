@@ -10,14 +10,17 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mthcsta/star-wars-api-test/controller"
+	"github.com/mthcsta/star-wars-api-test/dao"
 	"github.com/mthcsta/star-wars-api-test/model"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
-	planetController PlanetController = PlanetController{}
-	planets                           = []model.AddPlanet{
+	planetController controller.PlanetController = controller.PlanetController{}
+	planetDAO        dao.PlanetDAO               = dao.PlanetDAO{}
+	planets                                      = []model.AddPlanet{
 		{
 			Name:    "Tatooine",
 			Climate: "arid",
@@ -31,9 +34,11 @@ var (
 	}
 )
 
-func TestInsert(t *testing.T) {
+func TestPlanetInsert(t *testing.T) {
 	route := gin.Default()
 	route.POST("/", planetController.Insert)
+
+	// test new planet
 	jsonValue, err := json.Marshal(planets[0])
 	if err != nil {
 		log.Fatal(err)
@@ -44,10 +49,45 @@ func TestInsert(t *testing.T) {
 	}
 	w := httptest.NewRecorder()
 	route.ServeHTTP(w, req)
+
+	if w.Code != http.StatusConflict && w.Code != http.StatusCreated {
+		t.Errorf("Unexpected status code (%d)", w.Code)
+	}
+
+	// test new planet
+	planetDocuments := planetDAO.GetAll(req.Context(), model.FilterPlanet{Name: planets[1].Name})
+	// remove planet to test add again
+	if *planetDocuments != nil {
+		planetDocument := *planetDocuments
+		planetDAO.Remove(req.Context(), planetDocument[0].Id)
+	}
+
+	jsonValue, err = json.Marshal(planets[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	req, err = http.NewRequest("POST", "/", bytes.NewBuffer(jsonValue))
+	if err != nil {
+		log.Fatal(err)
+	}
+	w = httptest.NewRecorder()
+	route.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusCreated, w.Code)
+	// test planet exists
+	jsonValue, err = json.Marshal(planets[0])
+	if err != nil {
+		log.Fatal(err)
+	}
+	req, err = http.NewRequest("POST", "/", bytes.NewBuffer(jsonValue))
+	if err != nil {
+		log.Fatal(err)
+	}
+	w = httptest.NewRecorder()
+	route.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusConflict, w.Code)
 }
 
-func TestGetAll(t *testing.T) {
+func TestPlanetGetAll(t *testing.T) {
 	route := gin.Default()
 	route.GET("/", planetController.GetAll)
 
@@ -91,7 +131,7 @@ func TestGetAll(t *testing.T) {
 
 }
 
-func TestRemove(t *testing.T) {
+func TestPlanetRemove(t *testing.T) {
 	route := gin.Default()
 	route.DELETE("/:id", planetController.Remove)
 
@@ -111,6 +151,7 @@ func TestRemove(t *testing.T) {
 	objectId := primitive.NewObjectID().Hex()
 	req, _ = http.NewRequest("DELETE", "/"+objectId, nil)
 	w = httptest.NewRecorder()
+
 	route.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusNoContent, w.Code)
 

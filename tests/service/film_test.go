@@ -4,11 +4,12 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/mthcsta/star-wars-api-test/service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
-	filmService FilmService = FilmService{}
+	filmService service.FilmService = service.FilmService{}
 )
 
 func TestGetFilmsObjectIDById(t *testing.T) {

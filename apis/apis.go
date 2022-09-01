@@ -6,14 +6,11 @@ import (
 	"net/http"
 )
 
-type JsonResponse map[string]interface{}
-
 type API struct {
 	BaseUrl string
 }
 
 func (api *API) HandleRequest(path string) []byte {
-	// var result JsonResponse
 	url := api.BaseUrl + path
 	resp, err := http.Get(url)
 	if err != nil {
@@ -25,6 +22,4 @@ func (api *API) HandleRequest(path string) []byte {
 		log.Fatal(err)
 	}
 	return body
-	// json.Unmarshal(body, &result)
-	// return result
 }
