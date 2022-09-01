@@ -19,14 +19,14 @@ var (
 	planetController PlanetController = PlanetController{}
 	planets                           = []model.AddPlanet{
 		{
-			Name:    "Terra",
-			Climate: "Quente, Frio",
-			Terrain: "Variado",
+			Name:    "Tatooine",
+			Climate: "arid",
+			Terrain: "desert",
 		},
 		{
-			Name:    "Saturno",
-			Climate: "Frio",
-			Terrain: "Duro",
+			Name:    "Alderaan",
+			Climate: "temperate",
+			Terrain: "grasslands, mountains",
 		},
 	}
 )
