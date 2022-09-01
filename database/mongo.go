@@ -70,11 +70,13 @@ func ConnectDB() *mongo.Client {
 	return client
 }
 
-//Client instance
-var DB *mongo.Client = ConnectDB()
-var ListCollections []string = []string{"planets", "films"}
+// Client instance
+var (
+	DB              *mongo.Client = ConnectDB()
+	ListCollections []string      = []string{"planets", "films"}
+)
 
-//getting database collections
+// get database collections
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
 	collection := client.Database(common.Config.DbName).Collection(collectionName)
 	return collection

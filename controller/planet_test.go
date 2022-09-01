@@ -50,6 +50,8 @@ func TestInsert(t *testing.T) {
 func TestGetAll(t *testing.T) {
 	route := gin.Default()
 	route.GET("/", planetController.GetAll)
+
+	// test get all planets records
 	req, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
 	route.ServeHTTP(w, req)
@@ -60,6 +62,33 @@ func TestGetAll(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
+	// Search one result and compare used with returned
+	req, _ = http.NewRequest("GET", "/?name="+results[0].Name, nil)
+	w = httptest.NewRecorder()
+	route.ServeHTTP(w, req)
+	response, _ = ioutil.ReadAll(w.Body)
+	var results2 []model.Planet
+	err = json.Unmarshal(response, &results2)
+	assert.Equal(t, http.StatusOK, w.Code)
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, results[0].Id, results2[0].Id)
+
+	// Search one result and compare used with returned
+	req, _ = http.NewRequest("GET", "/?id="+results[0].Id.Hex(), nil)
+	w = httptest.NewRecorder()
+	route.ServeHTTP(w, req)
+	response, _ = ioutil.ReadAll(w.Body)
+	var results3 []model.Planet
+	err = json.Unmarshal(response, &results3)
+	assert.Equal(t, http.StatusOK, w.Code)
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, results[0].Name, results3[0].Name)
+
 }
 
 func TestRemove(t *testing.T) {
