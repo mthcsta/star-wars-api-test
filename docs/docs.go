@@ -20,6 +20,37 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/films": {
+            "get": {
+                "description": "Get all films recorded",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "film"
+                ],
+                "summary": "Get all films recorded",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search film by title",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Film"
+                        }
+                    }
+                }
+            }
+        },
         "/planets": {
             "get": {
                 "description": "Get all planets recorded",
@@ -33,6 +64,20 @@ const docTemplate = `{
                     "planet"
                 ],
                 "summary": "Get all planets recorded",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search film by exactly name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search film by exactly id",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -57,8 +102,19 @@ const docTemplate = `{
                     "planet"
                 ],
                 "summary": "Insert a new planet",
+                "parameters": [
+                    {
+                        "description": "Add Movie. Send without the key 'films'.",
+                        "name": "planet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AddPlanet"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "a",
                         "schema": {
                             "$ref": "#/definitions/model.Planet"
@@ -96,6 +152,12 @@ const docTemplate = `{
                             "type": "Registro"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "ObjectID"
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
@@ -107,11 +169,57 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.AddPlanet": {
+            "type": "object",
+            "properties": {
+                "climate": {
+                    "type": "string",
+                    "example": "arid"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Matheus"
+                },
+                "terrain": {
+                    "type": "string",
+                    "example": "desert"
+                }
+            }
+        },
+        "model.Film": {
+            "type": "object",
+            "properties": {
+                "director": {
+                    "type": "string"
+                },
+                "episode_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "id_reference": {
+                    "type": "integer"
+                },
+                "release_date": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Planet": {
             "type": "object",
             "properties": {
                 "climate": {
                     "type": "string"
+                },
+                "films": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Film"
+                    }
                 },
                 "id": {
                     "type": "string"

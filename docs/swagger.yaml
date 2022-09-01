@@ -1,8 +1,39 @@
 definitions:
+  model.AddPlanet:
+    properties:
+      climate:
+        example: arid
+        type: string
+      name:
+        example: Matheus
+        type: string
+      terrain:
+        example: desert
+        type: string
+    type: object
+  model.Film:
+    properties:
+      director:
+        type: string
+      episode_id:
+        type: integer
+      id:
+        type: string
+      id_reference:
+        type: integer
+      release_date:
+        type: string
+      title:
+        type: string
+    type: object
   model.Planet:
     properties:
       climate:
         type: string
+      films:
+        items:
+          $ref: '#/definitions/model.Film'
+        type: array
       id:
         type: string
       name:
@@ -16,11 +47,40 @@ info:
     name: API Support
     url: http://localhost:9000
 paths:
+  /films:
+    get:
+      consumes:
+      - application/json
+      description: Get all films recorded
+      parameters:
+      - description: Search film by title
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Film'
+      summary: Get all films recorded
+      tags:
+      - film
   /planets:
     get:
       consumes:
       - application/json
       description: Get all planets recorded
+      parameters:
+      - description: Search film by exactly name
+        in: query
+        name: name
+        type: string
+      - description: Search film by exactly id
+        in: query
+        name: id
+        type: string
       produces:
       - application/json
       responses:
@@ -37,10 +97,17 @@ paths:
       consumes:
       - application/json
       description: Insert a new planet
+      parameters:
+      - description: Add Movie. Send without the key 'films'.
+        in: body
+        name: planet
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddPlanet'
       produces:
       - application/json
       responses:
-        "200":
+        "201":
           description: a
           schema:
             $ref: '#/definitions/model.Planet'
@@ -65,6 +132,10 @@ paths:
           description: No Content
           schema:
             type: Registro
+        "400":
+          description: Bad Request
+          schema:
+            type: ObjectID
         "401":
           description: Unauthorized
           schema:

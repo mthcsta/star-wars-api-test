@@ -5,10 +5,10 @@ import (
 )
 
 type AddPlanet struct {
-	Name    string               `json:"name" bson:"name"`
-	Climate string               `json:"climate" bson:"climate"`
-	Terrain string               `json:"terrain" bson:"terrain"`
-	Films   []primitive.ObjectID `bson:"films"`
+	Name    string               `json:"name" bson:"name" example:"Matheus"`
+	Climate string               `json:"climate" bson:"climate" example:"arid"`
+	Terrain string               `json:"terrain" bson:"terrain" example:"desert"`
+	Films   []primitive.ObjectID `json:"-" bson:"films"`
 }
 
 type Planet struct {

@@ -24,7 +24,7 @@ type PlanetController struct {
 // @Tags planet
 // @Accept  json
 // @Produce  json
-// Param user body models.Planet true "Add Movie"
+// @Param planet body model.AddPlanet true "Add Movie. Send without the key 'films'."
 // Failure 400 {object} httputil.Error
 // @Success 201 {object} model.Planet.Id "a"
 // @Router /planets [post]
@@ -71,6 +71,8 @@ func (p *PlanetController) Insert(ctx *gin.Context) {
 // @Tags planet
 // @Accept  json
 // @Produce  json
+// @Param name query string false "Search film by exactly name"
+// @Param id query string false "Search film by exactly id"
 // @Failure 404
 // @Success 200 {object} model.Planet
 // @Router /planets [get]
@@ -94,8 +96,9 @@ func (p *PlanetController) GetAll(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Planet Object ID to remove"
-// @Failure 401 ObjectID invalido
-// @Success 204 Registro removido
+// @Failure 400 ObjectID httputil.Error
+// @Failure 401 ObjectID httputil.Error
+// @Success 204 Registro No content
 // @Router /planets/{id} [delete]
 func (p *PlanetController) Remove(ctx *gin.Context) {
 	id := ctx.Param("id")

@@ -54,5 +54,4 @@ func main() {
 	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	route.Run(":" + common.Config.ServerPort)
-
 }
