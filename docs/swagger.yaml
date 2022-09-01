@@ -1,0 +1,75 @@
+definitions:
+  model.Planet:
+    properties:
+      climate:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      terrain:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@starwarsapi.io
+    name: API Support
+    url: http://localhost:9000
+paths:
+  /planets:
+    get:
+      consumes:
+      - application/json
+      description: Get all planets recorded
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Planet'
+        "404":
+          description: Not Found
+      summary: Get all planets recorded
+      tags:
+      - planet
+    post:
+      consumes:
+      - application/json
+      description: Insert a new planet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: a
+          schema:
+            $ref: '#/definitions/model.Planet'
+      summary: Insert a new planet
+      tags:
+      - planet
+  /planets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a planet by ObjectID
+      parameters:
+      - description: Planet Object ID to remove
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: Registro
+        "401":
+          description: Unauthorized
+          schema:
+            type: ObjectID
+      summary: Remove a planet by ObjectID
+      tags:
+      - planet
+swagger: "2.0"

@@ -1,0 +1,116 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {
+            "name": "API Support",
+            "url": "http://localhost:9000",
+            "email": "support@starwarsapi.io"
+        }
+    },
+    "paths": {
+        "/planets": {
+            "get": {
+                "description": "Get all planets recorded",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "planet"
+                ],
+                "summary": "Get all planets recorded",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Planet"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "post": {
+                "description": "Insert a new planet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "planet"
+                ],
+                "summary": "Insert a new planet",
+                "responses": {
+                    "200": {
+                        "description": "a",
+                        "schema": {
+                            "$ref": "#/definitions/model.Planet"
+                        }
+                    }
+                }
+            }
+        },
+        "/planets/{id}": {
+            "delete": {
+                "description": "Remove a planet by ObjectID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "planet"
+                ],
+                "summary": "Remove a planet by ObjectID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Planet Object ID to remove",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "Registro"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "ObjectID"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Planet": {
+            "type": "object",
+            "properties": {
+                "climate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "terrain": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
